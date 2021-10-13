@@ -1,143 +1,74 @@
+import java.util.Scanner;
+
 public class Analyzer {
-
-    //Scans data set 1-by-1 to find value:
-    public static int LinearSearch(String[] dataSet, String element)
+    public static int linearSearch(String[] dataSet, String element)
     {
-        int max = dataSet.length - 1;
 
-        for (int i = 0; i < max; i++)
+        int lenData = dataSet.length;
+        //Iterate through every index and see if the element is equal to the element at some index in the dataset.
+        for(int i=0;i<lenData;i++)
         {
-            int compare = element.compareTo(String.valueOf(dataSet[i]));
-
-            if (compare == 0)
+            if(element.equals(dataSet[i]))
             {
+                System.out.println("The Linear Search found the element at index "+ i);
                 return i;
+
             }
         }
-
-        //Else return a -1 as an error:
+        System.out.println("The Linear Search did not find the element");
         return -1;
     }
-
-    //Scans data set through dividing midpoints to find value:
-    public static int BinarySearch(String[] dataSet, String element) {
-        int low = 0;
-        int high = dataSet.length - 1;
-
-        while (high >= low) {
-
-            int mid = (high + low) / 2;
-            int compare = element.compareTo(String.valueOf(dataSet[mid]));
-
-            if (compare > 0) {
-                low = mid + 1;
-            } else if (compare < 0) {
-                high = mid - 1;
-            } else {
-                return mid;
-            }
-        }
-
-        //Else return -1 as an error:
-        return -1;
-    }
-
-    public static void main(String[] args)
+    public static int binarySearch(String[] dataSet, String element)
     {
-        //Links string data to acquire characters:
-        String [] dataSet = StringData.getData();
-
-        //Tests for not_here input in linear & binary time:
-        long startTime = System.nanoTime();
-        int linearTime = LinearSearch(dataSet, "not_here");
-        long stopTime = System.nanoTime();
-
-        long TotalTime = stopTime - startTime;
-
-        if (linearTime == -1)
+        int lenData = dataSet.length;
+        int minIndex=0;
+        int highIndex=lenData;
+        int mid;
+        //Uses the formulas given in lecture to perform binary search. Return the mid value if it is the element.
+        //If the element is greater than the mid of the dataset, make the min the mid+1
+        //If the element is less than the mid of the dataset, make the max, the mid-1.
+        while(minIndex <= highIndex)
         {
-            System.out.println("Could not find: not_here using linear time");
+            mid=(minIndex+(highIndex-minIndex)/2);
+            if (element.equals(dataSet[mid]))
+            {
+                System.out.println("The Binary Search found the element at index "+ mid);
+                return mid;
+
+
+            }
+            if (element.compareTo(dataSet[mid]) > 0)
+            {
+                minIndex=mid+1;
+            }
+            if (element.compareTo(dataSet[mid]) < 0)
+            {
+                highIndex=mid-1;
+            }
         }
-        else
-        {
-            System.out.println("not_here found in " + TotalTime + "nanoseconds using linear time");
-        }
+        System.out.println("The Binary Search did not find the element");
+        return -1;
 
-        startTime = System.nanoTime();
-        int binaryTime = BinarySearch(dataSet, "not_here");
-        stopTime = System.nanoTime();
 
-        TotalTime = stopTime - startTime;
+    }
+    public static void main(String args[])
+    {
 
-        if (binaryTime == -1)
-        {
-            System.out.println("Could not find: not_here using binary time");
-        }
-        else
-        {
-            System.out.println("not_here found in "+ TotalTime + " nanoseconds using binary time");
-        }
 
-        //Tests for mzzzz input in linear & binary time:
-        startTime = System.nanoTime();
-        linearTime = LinearSearch(dataSet, "mzzzz");
-        stopTime = System.nanoTime();
+        String[] dataSet = StringData.getData();
+        //Scan in the element we want
+        Scanner scanner = new Scanner(System.in);
+        String element = scanner.next();
+        //Check the time the binary search takes
+        long firstTime1 = System.nanoTime();
+        int result1 = binarySearch(dataSet, element);
+        long lastTime1 = System.nanoTime() - firstTime1;
 
-        TotalTime = stopTime - startTime;
-
-        if (linearTime == -1)
-        {
-            System.out.println("Could not find: mzzzz using linear time");
-        }
-        else
-        {
-            System.out.println("mzzzz found in "+ TotalTime + " nanoseconds using linear time");
-        }
-
-        startTime = System.nanoTime();
-        binaryTime = BinarySearch(dataSet, "mzzzz");
-        stopTime = System.nanoTime();
-
-        TotalTime = stopTime - startTime;
-
-        if (binaryTime == -1)
-        {
-            System.out.println("Could not find: mzzzz using binary time");
-        }
-        else
-        {
-            System.out.println("mzzzz found in "+ TotalTime + " nanoseconds using binary time");
-        }
-
-        //Tests for aaaaa input in linear & binary time:
-        startTime = System.nanoTime();
-        linearTime = LinearSearch(dataSet, "aaaaa");
-        stopTime = System.nanoTime();
-
-        TotalTime = stopTime - startTime;
-
-        if (linearTime == -1)
-        {
-            System.out.println("Could not find: aaaaa using linear time");
-        }
-        else
-        {
-            System.out.println("aaaaa found  "+ TotalTime + " nanoseconds using linear time");
-        }
-
-        startTime = System.nanoTime();
-        binaryTime = BinarySearch(dataSet, "aaaaa");
-        stopTime = System.nanoTime();
-
-        TotalTime = stopTime - startTime;
-
-        if (binaryTime == -1)
-        {
-            System.out.println("Could not find: aaaaa using binary time");
-        }
-        else
-        {
-            System.out.println("aaaaa found in "+ TotalTime + " nanoseconds using binary time");
-        }
+        System.out.println("The Binary Search took "+ lastTime1);
+        //Check the time the linear search takes
+        long firstTime2 = System.nanoTime();
+        int result2 = linearSearch(dataSet, element);
+        long lastTime2 = System.nanoTime() - firstTime2;
+        System.out.println("The Linear Search took "+ lastTime2);
     }
 }
